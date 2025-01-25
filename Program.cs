@@ -1,6 +1,7 @@
 ﻿using FormatConverter;
 using FormatConverter.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using static System.Net.Mime.MediaTypeNames;
 
 Console.WriteLine("Welcome to the format converter.");
@@ -18,6 +19,15 @@ while (!File.Exists(filePath))
 }
 
 var people = Converter.ConvertFile(filePath);
+var peopleObject = new { people };
 
-var json = JsonConvert.SerializeObject(people, Formatting.Indented);
+var settings = new JsonSerializerSettings
+{
+    ContractResolver = new DefaultContractResolver
+    {
+        NamingStrategy = new CamelCaseNamingStrategy()
+    },
+    Formatting = Formatting.Indented
+};
+var json = JsonConvert.SerializeObject(peopleObject, settings);
 Console.WriteLine(json);

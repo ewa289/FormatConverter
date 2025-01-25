@@ -121,13 +121,13 @@ public class Converter
         var firstIndex = line.IndexOf('|');
         var secondIndex = line.IndexOf('|', firstIndex + 1);
 
-        var firstName = line.Substring(firstIndex + 1, secondIndex - 2);
-        var lastName = line.Substring(secondIndex + 1);
+        var firstname = line.Substring(firstIndex + 1, secondIndex - 2);
+        var lastname = line.Substring(secondIndex + 1);
 
         return new Person()
         {
-            FirstName = firstName,
-            LastName = lastName,
+            Firstname = firstname,
+            Lastname = lastname,
         };
 
     }
@@ -143,7 +143,7 @@ public class Converter
         return new FamilyMember()
         {
             Name = name,
-            BirthYear = int.Parse(birthYear)
+            BirthYear = birthYear
         };
     }
 }
