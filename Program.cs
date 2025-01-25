@@ -2,14 +2,13 @@
 using FormatConverter.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 Console.WriteLine("Welcome to the format converter.");
-//Console.WriteLine("Enter path of file to convert including filename:");
+Console.WriteLine("Enter path of file to convert including filename:");
 
-//var filePath = Console.ReadLine();
+var filePath = Console.ReadLine();
+//var filePath = @"C:\tmp\testFile.txt";
 
-var filePath = @"C:\tmp\testFile.txt";
 while (!File.Exists(filePath))
 {
     Console.WriteLine("Could not find the file. Make sure the path and file exist!");
@@ -19,15 +18,35 @@ while (!File.Exists(filePath))
 }
 
 var people = Converter.ConvertFile(filePath);
-var peopleObject = new { people };
 
-var settings = new JsonSerializerSettings
+WriteToDisk(people, filePath);
+
+void WriteToDisk(People people, string filePath)
 {
-    ContractResolver = new DefaultContractResolver
+    var peopleObject = new { people };
+
+    var settings = new JsonSerializerSettings
     {
-        NamingStrategy = new CamelCaseNamingStrategy()
-    },
-    Formatting = Formatting.Indented
-};
-var json = JsonConvert.SerializeObject(peopleObject, settings);
-Console.WriteLine(json);
+        ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        },
+        Formatting = Formatting.Indented
+    };
+    var json = JsonConvert.SerializeObject(peopleObject, settings);
+    //Console.WriteLine(json);
+
+    try
+    {
+        var extensionIndex = filePath.IndexOf('.');
+        var newFilePath = filePath.Substring(0, extensionIndex);
+
+        using StreamWriter writer = new StreamWriter($"{newFilePath}.json");
+        writer.Write(json);
+    }
+    catch (Exception ex)
+    {
+
+        throw new Exception("Failed to write to file.", ex);
+    }
+}

@@ -64,10 +64,9 @@ public class Converter
 
             return people;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
+            throw new Exception("Failed to convert file.", ex);
         }
 
     }
