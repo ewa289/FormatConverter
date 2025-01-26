@@ -11,7 +11,7 @@ public class Converter
             string? line;
             var isPerson = false;
             var isFamily = false;
-            People people = new People();
+            var people = new People();
             Person person = null;
             FamilyMember member = null;
 
@@ -73,13 +73,13 @@ public class Converter
     }
     private static Address GetAddress(string line)
     {
-        var firstIndex = line.IndexOf('|');
-        var secondIndex = line.IndexOf('|', firstIndex + 1);
-        var thirdIndex = line.IndexOf('|', secondIndex + 1);
+        var textDelimiter = new TextDelimiter(line);
+        var firstIndex = textDelimiter.FirstIndex;
+        var secondIndex = textDelimiter.SecondIndex;
+        var thirdIndex = textDelimiter.ThirdIndex;
 
         string city;
         string zipCode;
-
         var street = line.Substring(firstIndex + 1, secondIndex - 2);
 
         if (thirdIndex > 0)
@@ -103,8 +103,9 @@ public class Converter
 
     private static Phone GetPhoneDetails(string line)
     {
-        var firstIndex = line.IndexOf('|');
-        var secondIndex = line.IndexOf('|', firstIndex + 1);
+        var textDelimiter = new TextDelimiter(line);
+        var firstIndex = textDelimiter.FirstIndex;
+        var secondIndex = textDelimiter.SecondIndex;
 
         var mobile = line.Substring(firstIndex + 1, secondIndex - 2);
         var landLine = line.Substring(secondIndex + 1);
@@ -118,8 +119,9 @@ public class Converter
 
     private static Person GetPerson(string line)
     {
-        var firstIndex = line.IndexOf('|');
-        var secondIndex = line.IndexOf('|', firstIndex + 1);
+        var textDelimiter = new TextDelimiter(line);
+        var firstIndex = textDelimiter.FirstIndex;
+        var secondIndex = textDelimiter.SecondIndex;
 
         var firstname = line.Substring(firstIndex + 1, secondIndex - 2);
         var lastname = line.Substring(secondIndex + 1);
@@ -134,8 +136,9 @@ public class Converter
 
     private static FamilyMember GetFamilyMember(string line)
     {
-        var firstIndex = line.IndexOf('|');
-        var secondIndex = line.IndexOf('|', firstIndex + 1);
+        var textDelimiter = new TextDelimiter(line);
+        var firstIndex = textDelimiter.FirstIndex;
+        var secondIndex = textDelimiter.SecondIndex;
 
         var name = line.Substring(firstIndex + 1, secondIndex - 2);
         var birthYear = line.Substring(secondIndex + 1);
