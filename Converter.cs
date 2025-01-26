@@ -9,48 +9,49 @@ public class Converter
         try
         {
             string? line;
-            string firstLetter; //Todo: better name
-            string latestStartLetter = ""; //Todo: better name
+            var isPerson = false;
+            var isFamily = false;
             People people = new People();
-            Person person = new Person();
+            Person person = null;
             FamilyMember member = null;
 
             using StreamReader reader = new StreamReader(filePath);
             while ((line = reader.ReadLine()) != null)
             {
-                firstLetter = line.Substring(0, 1);
-                switch (firstLetter)
+                switch (line.Substring(0, 1))
                 {
                     case "P":
-                        latestStartLetter = firstLetter;
+                        isPerson = true;
+                        isFamily = false;
                         person = GetPerson(line);
                         people.Person.Add(person);
 
                         break;
                     case "T":
                         var phone = GetPhoneDetails(line);
-                        if (latestStartLetter == "P" && person is not null)
+                        if (isPerson && person is not null)
                         {
                             person.Phone = phone;
                         }
-                        else if (latestStartLetter == "F" && member is not null)
+                        else if (isFamily && member is not null)
                         {
                             member.Phone = phone;
                         }
                         break;
                     case "A":
                         var address = GetAddress(line);
-                        if (latestStartLetter == "P" && person is not null)
+                        if (isPerson && person is not null)
                         {
                             person.Address = address;
                         }
-                        else if (latestStartLetter == "F" && member is not null)
+                        else if (isFamily && member is not null)
                         {
                             member.Address = address;
                         }
                         break;
                     case "F":
-                        latestStartLetter = firstLetter;
+                        isFamily = true;
+                        isPerson = false;
                         member = GetFamilyMember(line);
 
                         if (person is not null)
