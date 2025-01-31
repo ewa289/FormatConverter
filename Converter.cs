@@ -73,23 +73,19 @@ public class Converter
     }
     private static Address GetAddress(string line)
     {
-        var textDelimiter = new TextDelimiter(line);
-        var firstIndex = textDelimiter.FirstIndex;
-        var secondIndex = textDelimiter.SecondIndex;
-        var thirdIndex = textDelimiter.ThirdIndex;
-
+        var parts = line.Split('|');
+        var street = parts[1];
         string city;
         string zipCode;
-        var street = line.Substring(firstIndex + 1, secondIndex - 2);
 
-        if (thirdIndex > 0)
+        if (parts.Length > 3)
         {
-            city = line.Substring(secondIndex + 1, thirdIndex - secondIndex - 1);
-            zipCode = thirdIndex > 0 ? line.Substring(thirdIndex + 1) : "";
+            city = parts[2];
+            zipCode = parts[3];
         }
         else
         {
-            city = line.Substring(secondIndex + 1);
+            city = parts[2];
             zipCode = "";
         }
 
@@ -103,50 +99,35 @@ public class Converter
 
     private static Phone GetPhoneDetails(string line)
     {
-        var textDelimiter = new TextDelimiter(line);
-        var firstIndex = textDelimiter.FirstIndex;
-        var secondIndex = textDelimiter.SecondIndex;
-
-        var mobile = line.Substring(firstIndex + 1, secondIndex - 2);
-        var landLine = line.Substring(secondIndex + 1);
+        var parts = line.Split('|');
 
         return new Phone()
         {
-            Mobile = mobile,
-            Landline = landLine,
+            Mobile = parts[1],
+            Landline = parts[2],
         };
     }
 
     private static Person GetPerson(string line)
     {
-        var textDelimiter = new TextDelimiter(line);
-        var firstIndex = textDelimiter.FirstIndex;
-        var secondIndex = textDelimiter.SecondIndex;
-
-        var firstname = line.Substring(firstIndex + 1, secondIndex - 2);
-        var lastname = line.Substring(secondIndex + 1);
-
+        var parts = line.Split('|');
+        
         return new Person()
         {
-            Firstname = firstname,
-            Lastname = lastname,
+            Firstname = parts[1],
+            Lastname = parts[2],
         };
 
     }
 
     private static FamilyMember GetFamilyMember(string line)
     {
-        var textDelimiter = new TextDelimiter(line);
-        var firstIndex = textDelimiter.FirstIndex;
-        var secondIndex = textDelimiter.SecondIndex;
-
-        var name = line.Substring(firstIndex + 1, secondIndex - 2);
-        var birthYear = line.Substring(secondIndex + 1);
-
+        var parts = line.Split('|');
+        
         return new FamilyMember()
         {
-            Name = name,
-            BirthYear = birthYear
+            Name = parts[1],
+            BirthYear = parts[2]
         };
     }
 }
